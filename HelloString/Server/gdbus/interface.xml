@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<node name="/com/example/sampleNode">
+  <interface name="com.example.Interface">
+    <method name="MessageMethod">
+      <arg type="s" name="message" direction="in"/>
+      <arg type="i" name="callerPid" direction="in"/>
+    </method>
+ 
+    <signal name="notify">
+      <arg type="s" name="msg"/>
+    </signal>
+  </interface>
+</node>

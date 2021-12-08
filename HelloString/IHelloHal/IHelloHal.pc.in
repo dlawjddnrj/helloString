@@ -1,0 +1,10 @@
+libdir=@HELLO_LIB_SRC@
+includedir=@HELLO_SRC@/include/IhelloHal
+
+Name: libIHelloHal
+Description: C++ library for helloString Projcet Hal
+# modules are required : file name of .pc file
+# Requires: giomm-2.4 glibmm-2.4 glib-2.0 gdbusCodegenGlibmm
+Version: 1.0
+#Libs: -L${libdir} -lIHelloHal
+Cflags: -I${includedir}

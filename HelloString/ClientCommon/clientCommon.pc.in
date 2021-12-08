@@ -1,0 +1,10 @@
+libdir=@HELLO_LIB_SRC@
+includedir=@HELLO_SRC@/include
+
+Name: libclientCommon
+Description: C++ library for helloString Project
+# modules are required : file name of .pc file
+Requires: giomm-2.4 glibmm-2.4 glib-2.0 gdbusCodegenGlibmm
+Version: 1.0
+Libs: -L${libdir} -lclientCommon
+Cflags: -I${includedir}
