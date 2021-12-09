@@ -22,10 +22,12 @@ bool GenCodeService::halOpen() {
     return true;
 }
 
+// service는 Controller랑 hal 객체를 알고 있고
+
 bool GenCodeService::startService()
 {
-    mStub.init();
     bool isHal = halOpen();
+    mStub.init(mHal);
 
     if(isHal) {
         mStub.startService();
@@ -37,7 +39,7 @@ bool GenCodeService::startService()
         std::string abc = "Test";
 
         mHal->setTimeListener(mListenerImpl);
-        mHal->printMsg(abc);
+        // mHal->printMsg(abc);
 
         // handle은 따로 close하지 않는다. 현재 로직은 genCodeService 프로세스의 생명주기가 서버 종료까지 계속 살아있기 때문이다.
         // dlclose(handle);

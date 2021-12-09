@@ -10,7 +10,7 @@ class GenCodeController : public com::example::InterfaceStub {
 public:
     GenCodeController();
     ~GenCodeController();
-    void init();
+    void init(IHelloHal *hal);
 
     // MessageMethod로 받음
     void MessageMethod(const Glib::ustring & message,
@@ -25,6 +25,7 @@ private:
     guint mConnectionId;
     std::vector<Glib::ustring> mProxyList;
     std::map<std::string, guint> mProxyWatchId;
+    IHelloHal *mHal;
 };
 
 #endif // GEN_CODE_CONTROLLER_H

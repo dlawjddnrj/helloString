@@ -11,7 +11,8 @@ GenCodeController::~GenCodeController()
     std::cout << "~GenCodeController ~~~" << std::endl;
 }
 
-void GenCodeController::init() {
+void GenCodeController::init(IHelloHal *hal) {
+    mHal = hal;
     std::cout << "init !" << std::endl;
     mConnectionId = Gio::DBus::own_name(Gio::DBus::BUS_TYPE_SESSION,
                                    "com.example.Interface",
@@ -40,6 +41,7 @@ void GenCodeController::MessageMethod(const Glib::ustring& message,
     std::cout << "received Message : (" << message << ") -From callerPid : " << callerPid << std::endl;
     invocation.ret();
     notify_signal.emit(message);
+    mHal->printMsg(message);
 }
 
 bool GenCodeController::startService()
@@ -49,10 +51,7 @@ bool GenCodeController::startService()
 }
 
 void GenCodeController::eventEmit(const Glib::ustring& message) {
-    // bus 연결 확인 1이 아닌 값은 연결되지 않는 값.
-    // if(mConnectionId == 1) {
         notify_signal.emit(message);
-    // }
 }
 
 GenCodeController* GenCodeController::getStub() {
