@@ -25,7 +25,6 @@ private:
 
 class GenCodeService {
 public:
-    static GenCodeService& getInstance();
     bool startService();
     GenCodeService();
     ~GenCodeService();

@@ -22,12 +22,6 @@ bool GenCodeService::halOpen() {
     return true;
 }
 
-GenCodeService &GenCodeService::getInstance()
-{
-    static GenCodeService instance;
-    return instance;
-}
-
 bool GenCodeService::startService()
 {
     mStub.init();
