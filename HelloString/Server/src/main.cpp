@@ -7,9 +7,10 @@ int main(void) {
     Glib::RefPtr<Glib::MainLoop> loop = Glib::MainLoop::create();
     std::cout << "Server main() !!!" << std::endl;
 
-    GenCodeService& tempStub = GenCodeService::getInstance();
-    bool tempValue = tempStub.startService();
-    if(!tempValue) {
+    GenCodeService serverService;
+    bool isService = serverService.startService();
+
+    if(!isService) {
         std::cout << "Error... Not true" << std::endl;
         return 0;
     }

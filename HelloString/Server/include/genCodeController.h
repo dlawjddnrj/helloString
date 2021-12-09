@@ -10,6 +10,7 @@ class GenCodeController : public com::example::InterfaceStub {
 public:
     GenCodeController();
     ~GenCodeController();
+    void init();
 
     // MessageMethod로 받음
     void MessageMethod(const Glib::ustring & message,
@@ -17,6 +18,7 @@ public:
                        MethodInvocation &invocation) override;
     bool startService();
     void eventEmit(const Glib::ustring& message);
+    GenCodeController* getStub();
 
 private:
     // gdbus

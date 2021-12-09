@@ -1,24 +1,25 @@
 #include "../include/genCodeService.h"
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
-
-struct passwd *pw = getpwuid(getuid());
-char *homedir = pw->pw_dir;
-char *halPath = "/hello/lib/libhelloHal.so";
-
-void HelloListenerImpl::onEvent(std::string& msg) {
-        std::cout << "onEvent !" << std::endl;
-        mController->eventEmit(msg);
-}
-
-HelloListenerImpl::HelloListenerImpl() { }
-
-HelloListenerImpl::HelloListenerImpl(GenCodeController *instance)
-    : mController(instance) { }
 
 GenCodeService::GenCodeService() {
     std::cout << "GenCodeService..." << std::endl;
+}
+
+bool GenCodeService::halOpen() {
+    void *handle = NULL;
+
+    handle = dlopen("/opt/test/lib/libhelloHal.so", RTLD_LAZY);
+
+    if(!handle) {
+        std::cout << "dlopen error what ? : " << dlerror() << std::endl;
+        return false;
+    }
+    mHal = (IHelloHal*) dlsym(handle, HELLO_INSTANCE_STR);
+
+    if(!mHal) {
+        std::cout << "dlsym error what ? : " << dlerror() << std::endl;
+        return false;
+    }
+    return true;
 }
 
 GenCodeService &GenCodeService::getInstance()
@@ -29,39 +30,29 @@ GenCodeService &GenCodeService::getInstance()
 
 bool GenCodeService::startService()
 {
-    mStub = std::make_shared<GenCodeController>();
-    mStub->startService();
+    mStub.init();
+    bool isHal = halOpen();
 
-    // mStub의 주소를 넘겨주지 않아서 기본 생성자가 생성되어 mController 객체가 비어있었음.
-    mListenerImpl = std::make_shared<HelloListenerImpl>(mStub.get());
+    if(isHal) {
+        mStub.startService();
+        std::cout << "mStub : " << &mStub << std::endl;
+        std::cout << "mStub.get() " << mStub.getStub() << std::endl;
 
-    std::string abc = "Test";
+        HelloListenerImpl* mListenerImpl = new HelloListenerImpl(mStub.getStub());
 
-    void *handle = NULL;
+        std::string abc = "Test";
 
-    strcat(homedir, halPath);
+        mHal->setTimeListener(mListenerImpl);
+        mHal->printMsg(abc);
 
-    handle = dlopen(homedir, RTLD_LAZY);
+        // handle은 따로 close하지 않는다. 현재 로직은 genCodeService 프로세스의 생명주기가 서버 종료까지 계속 살아있기 때문이다.
+        // dlclose(handle);
 
-    if(!handle) {
-        std::cout << "dlopen error what ? : " << dlerror() << std::endl;
+        std::cout << "GenCodeService::startService()" << std::endl;
+        return true;
+    } else {
         return false;
     }
-
-    IHelloHal* hal = (IHelloHal*) dlsym(handle, HELLO_INSTANCE_STR);
-    hal->setTimeListener(mListenerImpl.get());
-
-    if(!hal) {
-        std::cout << "dlopen error what ? : " << dlerror() << std::endl;
-        return false;
-    }
-
-    hal->printMsg(abc);
-
-    // dlclose(handle);
-
-    std::cout << "GenCodeService::startService()" << std::endl;
-    return true;
 }
 
 GenCodeService::~GenCodeService()

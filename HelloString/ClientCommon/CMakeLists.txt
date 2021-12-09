@@ -7,15 +7,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(HELLO_SRC "~/hello")
 set(COMMON_LIB_NAME clientCommon)
-set(HELLO_LIB_SRC "~/hello/lib")
+set(PROJECT_DESTINATION "/opt/test")
+set(PROJECT_LIB_DESTINATION "/opt/test/lib")
 
 set(SRC_PROXY
 	${CMAKE_CURRENT_SOURCE_DIR}/src/genCodeProxy.cpp
 )
 #### 임의로 만든 pkg-config 파일의 경로를 /usr/x86_linux.../pkgconifg/ 경로에서 임의 경로로 설정 ####
-set(ENV{PKG_CONFIG_PATH} "$ENV{HOME}/hello/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
+set(ENV{PKG_CONFIG_PATH} "/opt/test/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
 
 #### pkg-config 사용하여 라이브러리 검색 ####
 find_package(PkgConfig)
@@ -39,7 +39,7 @@ target_include_directories (
 
 find_library(CHECK_LIBRARY
 	NAMES gdbusCodegenGlibmm
-	PATHS ~/hello/lib
+	PATHS ${PROJECT_LIB_DESTINATION}
 )
 
 target_link_libraries (
@@ -59,7 +59,7 @@ configure_file(
 
 install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/clientCommon.pc
-    DESTINATION ~/hello/lib/pkgconfig
+    DESTINATION ${PROJECT_LIB_DESTINATION}/pkgconfig
 )
 
 #### pkg-config 파일 복사 ####
@@ -67,13 +67,13 @@ install(
 #### 라이브러리 및 필요한 header 파일 복사 ####
 install(
 	TARGETS ${COMMON_LIB_NAME}
-	LIBRARY DESTINATION ~/hello/lib
+	LIBRARY DESTINATION ${PROJECT_LIB_DESTINATION}
 )
 
 install(
 	FILES	${CMAKE_CURRENT_SOURCE_DIR}/include/genCodeProxy.h
 		${CMAKE_CURRENT_SOURCE_DIR}/include/threadExClass.h
-	DESTINATION ~/hello/include
+	DESTINATION ${PROJECT_DESTINATION}/include
 )
 #### 라이브러리 및 필요한 header 파일 복사 ####
 #### clientCommon ####
