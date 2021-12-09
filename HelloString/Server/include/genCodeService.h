@@ -6,13 +6,19 @@
 #include <iostream>
 #include <thread>
 #include <atomic>
+
 class HelloListenerImpl : public IHelloHal::IHelloListener
 {
 public:
-    HelloListenerImpl();
-    HelloListenerImpl(GenCodeController *instance);
+    HelloListenerImpl() { };
+    HelloListenerImpl(GenCodeController *instance)
+    : mController(instance) { };
 
-    void onEvent(std::string& msg) override;
+    void onEvent(std::string& msg) override {
+        std::cout << "onEvent !" << std::endl;
+        mController->getStub()->eventEmit(msg);
+    };
+
 private:
     GenCodeController* mController;
 };
@@ -23,14 +29,14 @@ public:
     bool startService();
     GenCodeService();
     ~GenCodeService();
-    void halOpen();
+    bool halOpen();
     void halsetTimeListener();
 
 private:
-    std::shared_ptr<GenCodeController> mStub = nullptr;
-    std::shared_ptr<HelloListenerImpl> mListenerImpl = nullptr;
+    GenCodeController mStub;
     std::string mName;
     IHelloHal* mHal;
+    void *handle;
 };
 
 #endif // GEN_CODE_SERVICE_H

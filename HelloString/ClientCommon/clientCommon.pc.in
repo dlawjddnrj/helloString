@@ -1,5 +1,5 @@
-libdir=@HELLO_LIB_SRC@
-includedir=@HELLO_SRC@/include
+libdir=@PROJECT_LIB_DESTINATION@
+includedir=@PROJECT_DESTINATION@/include
 
 Name: libclientCommon
 Description: C++ library for helloString Project

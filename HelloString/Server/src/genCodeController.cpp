@@ -3,7 +3,16 @@
 GenCodeController::GenCodeController()
 {
     std::cout << "GenCodeController ~~~" << std::endl;
+}
 
+GenCodeController::~GenCodeController()
+{
+    Gio::DBus::unown_name(mConnectionId);
+    std::cout << "~GenCodeController ~~~" << std::endl;
+}
+
+void GenCodeController::init() {
+    std::cout << "init !" << std::endl;
     mConnectionId = Gio::DBus::own_name(Gio::DBus::BUS_TYPE_SESSION,
                                    "com.example.Interface",
                                    [&] (const Glib::RefPtr<Gio::DBus::Connection>& connection,
@@ -22,12 +31,6 @@ GenCodeController::GenCodeController()
                                         std::cout << "Name lost - " << name << std::endl;
                                    });
     std::cout << "ready !" << std::endl;
-}
-
-GenCodeController::~GenCodeController()
-{
-    Gio::DBus::unown_name(mConnectionId);
-    std::cout << "~GenCodeController ~~~" << std::endl;
 }
 
 void GenCodeController::MessageMethod(const Glib::ustring& message,
@@ -50,4 +53,8 @@ void GenCodeController::eventEmit(const Glib::ustring& message) {
     // if(mConnectionId == 1) {
         notify_signal.emit(message);
     // }
+}
+
+GenCodeController* GenCodeController::getStub() {
+    return this;
 }

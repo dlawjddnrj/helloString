@@ -7,11 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(HELLO_SRC "~/hello")
-set(HELLO_LIB_SRC "~/hello/lib")
+set(PROJECT_DESTINATION "/opt/test")
+set(PROJECT_LIB_DESTINATION "/opt/test/lib")
 set(HELLO_LIB_NAME IHelloHal)
 
-set(ENV{PKG_CONFIG_PATH} "$ENV{HOME}/hello/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
+set(ENV{PKG_CONFIG_PATH} "/opt/test/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
 
 #### pkg-config 사용하여 라이브러리 검색 ####
 include(FindPkgConfig)
@@ -23,7 +23,7 @@ pkg_check_modules(GLIB REQUIRED glib-2.0)
 #### 필요한 header 파일 복사 ####
 install(
 	FILES	${CMAKE_CURRENT_SOURCE_DIR}/include/IhelloHal.h
-	DESTINATION ~/hello/include/IhelloHal
+	DESTINATION /opt/test/include/IhelloHal
 )
 #### 필요한 header 파일 복사 ####
 
@@ -36,6 +36,6 @@ configure_file(
 
 install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/IHelloHal.pc
-    DESTINATION ~/hello/lib/pkgconfig
+    DESTINATION /opt/test/lib/pkgconfig
 )
 #### pkg-config 파일 복사 ####

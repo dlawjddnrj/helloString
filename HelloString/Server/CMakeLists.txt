@@ -8,13 +8,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 set(GDBUS_LIB_NAME gdbusCodegenGlibmm)
-set(HELLO_SRC "~/hello")
-set(HELLO_LIB_SRC "~/hello/lib")
+set(PROJECT_DESTINATION "/opt/test")
+set(PROJECT_LIB_DESTINATION "/opt/test/lib")
 set(CODEGEN_CMD gdbus-codegen-glibmm3)
 set(CODEGEN_TARGET ${SERVICE_NAME}-codegen)
 set(SERVICE_XML "${CMAKE_SOURCE_DIR}/gdbus/interface.xml")
 
-set(ENV{PKG_CONFIG_PATH} "$ENV{HOME}/hello/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
+#### 임의로 만든 pkg-config 파일의 경로를 /usr/x86_linux.../pkgconifg/ 경로에서 임의 경로로 설정 ####
+set(ENV{PKG_CONFIG_PATH} "/opt/test/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
 
 #### pkg-config 사용하여 라이브러리 검색 ####
 include(FindPkgConfig)
@@ -23,16 +24,6 @@ pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
 pkg_check_modules(GLIB REQUIRED glib-2.0)
 pkg_check_modules(HELLOHAL REQUIRED IHelloHal)
 #### pkg-config 사용하여 라이브러리 검색 ####
-
-#### execute_process는 cmake 단계에서 실행, 필요한 디렉토리 생성 및 code generation ####
-# execute_process(
-# 	COMMAND mkdir -p ${CMAKE_SOURCE_DIR}/gdbus/gen
-# 	COMMAND mkdir -p $ENV{HOME}/hello
-# 	COMMAND mkdir -p $ENV{HOME}/hello/include
-# 	COMMAND mkdir -p $ENV{HOME}/hello/include/gen
-# 	COMMAND ${CODEGEN_CMD} ${SERVICE_XML} --generate-cpp-code=${CMAKE_SOURCE_DIR}/gdbus/gen/testGenCode
-# )
-#### execute_process는 cmake 단계에서 실행, 필요한 디렉토리 생성 및 code generation ####
 
 set(GEN_HEADER_SRC
 	${CMAKE_BINARY_DIR}/gen/testGenCode_common.h
@@ -51,20 +42,14 @@ set(SERVICE_GEN_SRC
 add_custom_command(
 	OUTPUT ${SERVICE_GEN_SRC}
 	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/gen
-	COMMAND mkdir -p $ENV{HOME}/hello
-	COMMAND mkdir -p $ENV{HOME}/hello/include
-	COMMAND mkdir -p $ENV{HOME}/hello/include/gen
+	COMMAND sudo mkdir -p /opt/test
+	COMMAND sudo mkdir -p /opt/test/include
+	COMMAND sudo mkdir -p /opt/test/include/gen
 	COMMAND ${CODEGEN_CMD} ${SERVICE_XML} --generate-cpp-code=${CMAKE_BINARY_DIR}/gen/testGenCode
 	DEPENDS ${SERVICE_XML}
-	COMMAND install ${GEN_HEADER_SRC} $ENV{HOME}/hello/include/gen
+	COMMAND sudo install ${GEN_HEADER_SRC} /opt/test/include/gen
 	COMMENT "Generate gdbus code"
 )
-
-#### library 생성에 필요한 헤더파일만 임의 경로로 복사 ####
-# execute_process(
-# 	COMMAND install ${GEN_HEADER_SRC} $ENV{HOME}/hello/include/gen
-# )
-#### library 생성에 필요한 헤더파일만 임의 경로로 복사 ####
 
 #### Library 생성 ####
 #### gdbusCodegenGlibmm ####
@@ -76,7 +61,7 @@ target_include_directories (
 	${CMAKE_BINARY_DIR}/include
 	${GLIBMM_INCLUDE_DIRS}
 	${GIOMM_INCLUDE_DIRS}
-	~/hello/include/gen
+	/opt/test/include/gen
 )
 
 target_link_libraries (
@@ -95,11 +80,11 @@ configure_file(
 
 install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/gdbusCodegenGlibmm.pc
-    DESTINATION ~/hello/lib/pkgconfig
+    DESTINATION /opt/test/lib/pkgconfig
 )
 #### pkg-config 파일 복사 ####
 
-install(TARGETS ${GDBUS_LIB_NAME} DESTINATION ~/hello/lib)
+install(TARGETS ${GDBUS_LIB_NAME} DESTINATION /opt/test/lib)
 #### gdbusCodegenGlibmm ####
 #### Library 생성 ####
 
@@ -132,5 +117,5 @@ target_link_libraries (
 	${CMAKE_DL_LIBS}
 )
 
-install(TARGETS ${SERVICE_NAME}_Server DESTINATION ~/hello/bin)
+install(TARGETS ${SERVICE_NAME}_Server DESTINATION /opt/test/bin)
 #### Server Binary 생성 및 복사 ####

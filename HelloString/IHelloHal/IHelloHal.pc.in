@@ -1,5 +1,5 @@
-libdir=@HELLO_LIB_SRC@
-includedir=@HELLO_SRC@/include/IhelloHal
+libdir=@PROJECT_LIB_DESTINATION@
+includedir=@PROJECT_DESTINATION@/include/IhelloHal
 
 Name: libIHelloHal
 Description: C++ library for helloString Projcet Hal

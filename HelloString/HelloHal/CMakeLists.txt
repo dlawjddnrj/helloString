@@ -7,10 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(CMAKE_PREFIX_PATH "$ENV{HOME}/hello/lib/pkgconfig")
-set(ENV{PKG_CONFIG_PATH} "$ENV{HOME}/hello/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
-set(HELLO_SRC "~/hello")
-set(HELLO_LIB_SRC "~/hello/lib")
+set(CMAKE_PREFIX_PATH "/opt/test/lib/pkgconfig")
+set(ENV{PKG_CONFIG_PATH} "/opt/test/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
+set(PROJECT_DESTINATION "/opt/test")
+set(PROJECT_LIB_DESTINATION "/opt/test/lib")
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(IHELLOHAL REQUIRED IHelloHal)
@@ -40,7 +40,7 @@ target_link_libraries (
 
 install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/helloHal.h
-    DESTINATION ~/hello/include/IhelloHal
+    DESTINATION /opt/test/include/IhelloHal
 )
 
 configure_file(
@@ -51,10 +51,10 @@ configure_file(
 
 install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/helloHal.pc
-    DESTINATION ~/hello/lib/pkgconfig
+    DESTINATION /opt/test/lib/pkgconfig
 )
 
 install(
 	TARGETS ${HAL_LIB_NAME}
-	LIBRARY DESTINATION ~/hello/lib
+	LIBRARY DESTINATION /opt/test/lib
 )

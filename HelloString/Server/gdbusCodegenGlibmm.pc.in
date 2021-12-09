@@ -1,5 +1,5 @@
-libdir=@HELLO_LIB_SRC@
-includedir=@HELLO_SRC@/include/gen
+libdir=@PROJECT_LIB_DESTINATION@
+includedir=@PROJECT_DESTINATION@/include/gen
 
 Name: libgdbusCodegenGlibmm
 Description: C++ library for gdbusCodegenGlibmm

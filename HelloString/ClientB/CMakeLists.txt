@@ -7,7 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(ENV{PKG_CONFIG_PATH} "$ENV{HOME}/hello/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
+set(PROJECT_DESTINATION "/opt/test")
+set(PROJECT_LIB_DESTINATION "/opt/test/lib")
+set(ENV{PKG_CONFIG_PATH} "/opt/test/lib/pkgconfig/:$ENV{PKG_CONFIG_PATH}")
 
 #### pkg-config 사용하여 라이브러리 검색 ####
 find_package(PkgConfig)
@@ -34,7 +36,7 @@ target_sources (
 
 find_library(CHECK_LIBRARY
 	NAMES clientCommon
-	PATHS ~/hello/lib
+	PATHS ${PROJECT_LIB_DESTINATION}
 )
 
 target_link_libraries(
@@ -45,5 +47,5 @@ target_link_libraries(
 	-lpthread
 )
 
-install(TARGETS ${SERVICE_NAME}_Client_B DESTINATION ~/hello/bin/B)
+install(TARGETS ${SERVICE_NAME}_Client_B DESTINATION ${PROJECT_DESTINATION}/bin/B)
 #### Client B ####
