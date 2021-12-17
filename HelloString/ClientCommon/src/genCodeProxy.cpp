@@ -9,6 +9,7 @@ GenCodeProxy::GenCodeProxy()
                                                            "/com/example/Interface");
 
     mIns->notify_signal.connect(sigc::mem_fun(this, &GenCodeProxy::receiveMessageForClient));
+    mIns->notify_signal.connect(sigc::mem_fun(this, &GenCodeProxy::clientAreceive));
 }
 
 GenCodeProxy::~GenCodeProxy()
@@ -24,4 +25,13 @@ Glib::RefPtr<com::example::InterfaceProxy> GenCodeProxy::get()
 void GenCodeProxy::receiveMessageForClient(std::string s)
 {
     std::cout << "receiveMessageForClient : " << s << std::endl;
+}
+
+void GenCodeProxy::clientAreceive(std::string s) {
+    mStr = s;
+    std::cout << "clientAreceive : " << mStr << std::endl;
+}
+
+std::string GenCodeProxy::getStr() {
+    return mStr;
 }

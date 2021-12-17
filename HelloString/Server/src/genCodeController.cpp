@@ -51,7 +51,7 @@ bool GenCodeController::startService()
 }
 
 void GenCodeController::eventEmit(const Glib::ustring& message) {
-        notify_signal.emit(message);
+    notify_signal.emit(message);
 }
 
 GenCodeController* GenCodeController::getStub() {
