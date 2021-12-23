@@ -10,9 +10,14 @@ class MyClass : public QObject {
 public:
     explicit MyClass(QObject* parent = 0);
     ~MyClass();
+signals:
+    void timerChanged(int count);
+
 public slots:
     void cppSlot(const QString& msg);
-    std::string getStr();
+    QString getStr();
+    void testFunc(QString);
+    void timerCount();
 
 public:
     GenCodeProxy mProxy;

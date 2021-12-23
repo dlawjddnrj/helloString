@@ -14,9 +14,9 @@ public:
     HelloListenerImpl(GenCodeController *instance)
     : mController(instance) { };
 
-    void onEvent(std::string& msg) override {
+    void onEvent(std::string& msg, int n) override {
         std::cout << "onEvent !" << std::endl;
-        mController->getStub()->eventEmit(msg);
+        mController->getStub()->eventEmit(msg, n);
     };
 
 private:

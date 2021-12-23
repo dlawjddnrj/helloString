@@ -17,7 +17,10 @@ int main(int argc, char* argv[]) {
     Glib::RefPtr<Glib::MainLoop> loop = Glib::MainLoop::create();
     std::cout << "Client A!" << std::endl;
 
+    MyClass myClass;
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
+    engine.rootContext()->setContextProperty("obj", &myClass);
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject* obj, const QUrl& objUrl) {
@@ -27,7 +30,7 @@ int main(int argc, char* argv[]) {
     engine.load(url);
 
     QObject* item = engine.rootObjects().first();
-    MyClass myClass;
+
     QObject::connect(item, SIGNAL(qmlSignal(QString)), &myClass, SLOT(cppSlot(QString)));
 
     loop->run();

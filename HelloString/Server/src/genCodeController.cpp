@@ -50,8 +50,8 @@ bool GenCodeController::startService()
     return true;
 }
 
-void GenCodeController::eventEmit(const Glib::ustring& message) {
-    notify_signal.emit(message);
+void GenCodeController::eventEmit(const Glib::ustring& message, const gint32 n) {
+    timerOccure_signal.emit(message, n);
 }
 
 GenCodeController* GenCodeController::getStub() {

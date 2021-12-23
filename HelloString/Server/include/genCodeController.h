@@ -17,7 +17,7 @@ public:
                        gint32 callerPid,
                        MethodInvocation &invocation) override;
     bool startService();
-    void eventEmit(const Glib::ustring& message);
+    void eventEmit(const Glib::ustring& message, const gint32 n);
     GenCodeController* getStub();
 
 private:

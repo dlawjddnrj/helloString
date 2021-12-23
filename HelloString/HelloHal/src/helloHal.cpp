@@ -15,9 +15,11 @@ void HelloHal::printMsg(std::string str) {
 
 void HelloHal::timerRun() {
     std::string tempstr = "timer occure";
+    timerCount = -1;
     while (1) {
         if(mListener) {
-            mListener->onEvent(tempstr);
+            timerCount += 1;
+            mListener->onEvent(tempstr, timerCount);
         }
         std::this_thread::sleep_for(std::chrono::seconds(10));
     }

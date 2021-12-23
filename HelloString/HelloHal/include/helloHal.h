@@ -14,6 +14,7 @@ public:
 
 private:
     IHelloListener* mListener = nullptr;
+    int timerCount = 0;
 };
 
 #endif // HELLO_HAL_H

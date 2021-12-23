@@ -4,6 +4,15 @@ MyClass::MyClass(QObject* parent) {}
 
 MyClass::~MyClass() {}
 
+void MyClass::testFunc(QString getStr) {
+    qDebug() << "testFunc Call !, " << getStr;
+}
+
+void MyClass::timerCount() {
+    qDebug() << "getCount : " << mProxy.getCount();
+    emit this->timerChanged(mProxy.getCount());
+}
+
 void MyClass::cppSlot(const QString& msg) {
     qDebug() << "Called the C++ slot with message:" << msg;
     const std::string tempStr = msg.toStdString();
@@ -12,9 +21,9 @@ void MyClass::cppSlot(const QString& msg) {
     } catch (const Glib::Error& err) {
         std::cout << "Error What ? :" << err.what() << std::endl;
     }
-    std::cout << "getStr : " << mProxy.getStr() << std::endl;
 }
 
-std::string MyClass::getStr() {
-    return mProxy.getStr();
+QString MyClass::getStr() {
+    QString temp = QString::fromStdString(mProxy.getStr());
+    return temp;
 }

@@ -9,5 +9,9 @@
     <signal name="notify">
       <arg type="s" name="msg"/>
     </signal>
+    <signal name="timerOccure">
+    	<arg type="s" name="timerMsg"/>
+    	<arg type="i" name="timerCount"/>
+    </signal>
   </interface>
 </node>

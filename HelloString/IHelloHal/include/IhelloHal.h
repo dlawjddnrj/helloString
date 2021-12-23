@@ -8,7 +8,7 @@ class IHelloHal {
 public:
     class IHelloListener {
         public:
-            virtual void onEvent(std::string& msg) = 0;
+            virtual void onEvent(std::string& msg, int n) = 0;
     };
 
     virtual void setTimeListener(IHelloListener *listener) = 0;

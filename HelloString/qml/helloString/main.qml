@@ -22,11 +22,34 @@ Window {
         anchors.bottomMargin: 20
         anchors.left: borderRect.left
         anchors.leftMargin: 50
-        visible: false
+        visible: true
         Text {
             id: topRectText
-            text: "Send to Enter"
+            text: ""
             anchors.centerIn: parent
+        }
+    }
+
+    Rectangle {
+        id: timerCountRect
+        width: 60
+        height: 30
+        border.color: "black"
+        border.width: 1
+        anchors.top: topRect.top
+        anchors.left: topRect.right
+        anchors.leftMargin: 50
+        Text {
+            id: timerCountText
+            text: qsTr("Count 0")
+            anchors.centerIn: parent
+        }
+    }
+
+    Connections {
+        target: obj
+        function onTimerChanged(count) {
+            timerCountText.text = "Count " + count
         }
     }
 
@@ -46,8 +69,28 @@ Window {
             visible: true
             onAccepted: {
                 clientA.qmlSignal(inputBox.text)
-//                inputBox.clear()
+                timer.start()
             }
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 100
+        running: false
+        repeat: false
+        onTriggered: {
+            topRectText.text = obj.getStr()
+        }
+    }
+
+    Timer {
+        id: countTimer
+        interval: 10000
+        running: true
+        repeat: true
+        onTriggered: {
+            obj.timerCount()
         }
     }
 
@@ -59,9 +102,8 @@ Window {
         anchors.topMargin: 27
         text: "Send"
         onClicked: {
-            console.log("TEST !!!")
             clientA.qmlSignal(inputBox.text)
-//            inputBox.clear()
+            timer.start()
         }
     }
 }
