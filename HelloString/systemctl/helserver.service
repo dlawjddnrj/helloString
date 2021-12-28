@@ -1,0 +1,9 @@
+[Unit]
+Description=Server Service...
+BindsTo=helbus.service
+After=helbus.service
+
+[Service]
+ExecStart=/opt/test/bin/dbusExample_Server
+Environment="DISPLAY=:0"
+Environment=DBUS_SESSION_BUS_ADDRESS="unix:path=/var/run/dbus/hel_bus"

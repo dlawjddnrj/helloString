@@ -23,8 +23,6 @@ public:
 private:
     // gdbus
     guint mConnectionId;
-    std::vector<Glib::ustring> mProxyList;
-    std::map<std::string, guint> mProxyWatchId;
     IHelloHal *mHal;
 };
 

@@ -1,0 +1,106 @@
+###########################################################
+@startuml HelloString.png
+
+Title HelloString Service Start
+'----------------------------------------------------------
+'==========================================================
+
+@startuml
+Title HelloString Service
+
+'''''''''''' Server
+group #LightBlue Server Start
+box "Server Service" #LightBlue
+participant GenCodeService
+participant HelloHal
+participant GenCodeController
+end box
+
+GenCodeService -> GenCodeService : MainLoop::create() : RefPtr<MainLoop>
+GenCodeService -> GenCodeService : startService() : bool
+
+group #LightBlue hal connection
+GenCodeService -> GenCodeService : halOpen() : bool
+GenCodeService -> HelloHal : dlopen(const char*, int) : void*
+GenCodeService -> HelloHal : dlsym(void*, const char*) : void*
+end group
+
+group #LightBlue dbus connection
+GenCodeService -> GenCodeController : init(IHelloHal *hal)
+GenCodeController -> GenCodeController : dbusAdd(dbusType, dbusName, ...)
+end group
+
+alt #LightBlue Hal Open Successful Case
+GenCodeService -> GenCodeController : startService() : bool
+GenCodeService -> GenCodeController : getStub() : GenCodeController*
+GenCodeService -> HelloHal : setTimeListener(IHelloListener *listener)
+
+group #LightBlue Timer that emits a signal every 10 seconds
+HelloHal -> HelloHal : onEvent(std::string&, int)
+HelloHal -> GenCodeController : eventEmit(std::string, int)
+end group
+
+else Hal Open failure Case
+GenCodeService ->[ : return
+end
+
+GenCodeService -> GenCodeService : loop->run()
+end group
+'''''''''''' Server
+
+'''''''''''' Client A
+group #MistyRose Client A Start
+box "Client A Service" #MistyRose
+participant GenCodeProxy_A
+participant MyClass
+end box
+
+MyClass -> MyClass : MainLoop::create() : RefPtr<MainLoop>
+alt #MistyRose dbus connection
+GenCodeProxy_A -> GenCodeProxy_A : dbusConnection(dbusType, dbusName, ...)
+end
+
+alt #MistyRose If you send a message from qml
+MyClass -> GenCodeProxy_A : MessageMethod_sync(const std::string, pid)
+GenCodeProxy_A -> GenCodeController : MessageMethod(std::string s, pid)
+GenCodeController -> GenCodeProxy_A : receiveMessageForClient(std::string s)
+GenCodeProxy_A -> MyClass : getStr() : QString
+MyClass -> MyClass : print message to qml
+end
+
+alt #MistyRose Timer signal every 10 seconds
+GenCodeController -> GenCodeProxy_A : receiveTimeOccure(std::string, int)
+GenCodeProxy_A -> MyClass : getCount() : int
+MyClass -> MyClass : print timer Count to qml
+end
+MyClass -> MyClass : loop->run()
+end group
+'''''''''''' Client A
+
+'''''''''''' Client B
+group #LightGreen Client B Start
+
+box "Client B Service" #LightGreen
+participant GenCodeProxy_B
+end box
+
+GenCodeProxy_B -> GenCodeProxy_B : MainLoop::create() : RefPtr<MainLoop>
+alt #LightGreen dbus connection
+GenCodeProxy_B -> GenCodeProxy_B : dbusConnection(dbusType, dbusName, ...)
+end
+
+alt #LightGreen When client A sends a message
+GenCodeController -> GenCodeProxy_B : receiveMessageForClient(std::string s)
+GenCodeProxy_B -> GenCodeProxy_B : output the received message
+end
+
+alt #LightGreen Timer signal every 10 seconds
+GenCodeController -> GenCodeProxy_B : receiveTimeOccure(std::string, int)
+GenCodeProxy_B -> GenCodeProxy_B : output the received timer Count
+end
+
+GenCodeProxy_B -> GenCodeProxy_B : loop->run()
+end group
+'''''''''''' Client B
+'''''''''''' ~ HelloString Service
+@enduml

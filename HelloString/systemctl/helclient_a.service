@@ -1,0 +1,12 @@
+[Unit]
+Description=Client A Service...
+After=helserver.service
+BindsTo=helserver.service
+
+[Service]
+ExecStart=/opt/test/bin/helloString
+Restart=on-failure
+RestartSec=60
+Environment="DISPLAY=:0"
+Environment=DBUS_SESSION_BUS_ADDRESS="unix:path=/var/run/dbus/hel_bus"
+

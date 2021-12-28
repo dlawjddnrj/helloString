@@ -1,0 +1,14 @@
+[Unit]
+Description=Client B Service...
+#상위 의존성을 구성한다. 목록의 유닛이 정상적일 경우 유닛이 시작된다. (필요 조건)
+After=helserver.service
+BindsTo=helserver.service
+#Requires= 와 매우 유사하다. systemd 개입 없이 갑wk기 서비스가 사라진 경우 (가령 NIC 가 물리적 장애가 난 경우) 해당 유닛도 같이 중지 하도록 설정하도록 한다.
+
+[Service]
+ExecStart=/opt/test/bin/B/dbusExample_Client_B
+Restart=on-failure
+RestartSec=60
+
+Environment="DISPLAY=:0"
+Environment=DBUS_SESSION_BUS_ADDRESS="unix:path=/var/run/dbus/hel_bus"
