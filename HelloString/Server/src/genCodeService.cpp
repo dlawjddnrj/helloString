@@ -25,14 +25,12 @@ bool GenCodeService::halOpen() {
 bool GenCodeService::startService()
 {
     bool isHal = halOpen();
-    mStub.init(mHal);
 
     if(isHal) {
+        mStub.init(mHal);
         mStub.startService();
 
         HelloListenerImpl* mListenerImpl = new HelloListenerImpl(mStub.getStub());
-
-        std::string abc = "Test";
 
         mHal->setTimeListener(mListenerImpl);
 

@@ -2,7 +2,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "myclass.h"
+#include "genCodeBridge.h"
 
 int main(int argc, char* argv[]) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -17,10 +17,10 @@ int main(int argc, char* argv[]) {
     Glib::RefPtr<Glib::MainLoop> loop = Glib::MainLoop::create();
     std::cout << "Client A!" << std::endl;
 
-    MyClass myClass;
+    GenCodeBridge bridge;
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
-    engine.rootContext()->setContextProperty("obj", &myClass);
+    engine.rootContext()->setContextProperty("obj", &bridge);
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject* obj, const QUrl& objUrl) {
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
     QObject* item = engine.rootObjects().first();
 
-    QObject::connect(item, SIGNAL(qmlSignal(QString)), &myClass, SLOT(cppSlot(QString)));
+    QObject::connect(item, SIGNAL(qmlSignal(QString)), &bridge, SLOT(cppSlot(QString)));
 
     loop->run();
     return app.exec();

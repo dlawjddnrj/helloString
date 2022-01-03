@@ -1,19 +1,19 @@
-#include "myclass.h"
+#include "genCodeBridge.h"
 
-MyClass::MyClass(QObject* parent) {}
+GenCodeBridge::GenCodeBridge(QObject* parent) {}
 
-MyClass::~MyClass() {}
+GenCodeBridge::~GenCodeBridge() {}
 
-void MyClass::testFunc(QString getStr) {
+void GenCodeBridge::testFunc(QString getStr) {
     qDebug() << "testFunc Call !, " << getStr;
 }
 
-void MyClass::timerCount() {
+void GenCodeBridge::timerCount() {
     qDebug() << "getCount : " << mProxy.getCount();
     emit this->timerChanged(mProxy.getCount());
 }
 
-void MyClass::cppSlot(const QString& msg) {
+void GenCodeBridge::cppSlot(const QString& msg) {
     qDebug() << "Called the C++ slot with message:" << msg;
     const std::string tempStr = msg.toStdString();
     try {
@@ -23,7 +23,7 @@ void MyClass::cppSlot(const QString& msg) {
     }
 }
 
-QString MyClass::getStr() {
+QString GenCodeBridge::getStr() {
     QString temp = QString::fromStdString(mProxy.getStr());
     return temp;
 }

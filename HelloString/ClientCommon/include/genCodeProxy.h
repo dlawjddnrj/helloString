@@ -12,7 +12,6 @@ public:
     void receiveMessageForClient(std::string s);
     void receiveTimeOccure(std::string s, int n);
     Glib::RefPtr<com::example::InterfaceProxy> get();
-    void clientAreceive(std::string s);
     std::string getStr();
     int getCount();
 

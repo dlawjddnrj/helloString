@@ -21,7 +21,6 @@ public:
     GenCodeController* getStub();
 
 private:
-    // gdbus
     guint mConnectionId;
     IHelloHal *mHal;
 };

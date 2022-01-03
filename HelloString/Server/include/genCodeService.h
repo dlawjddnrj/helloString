@@ -33,9 +33,7 @@ public:
 
 private:
     GenCodeController mStub;
-    std::string mName;
     IHelloHal* mHal;
-    void *handle;
 };
 
 #endif // GEN_CODE_SERVICE_H

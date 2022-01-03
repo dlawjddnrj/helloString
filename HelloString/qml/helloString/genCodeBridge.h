@@ -1,15 +1,15 @@
-#ifndef MYCLASS_H
-#define MYCLASS_H
+#ifndef GenCodeBridge_H
+#define GenCodeBridge_H
 
 #include <genCodeProxy.h>
 #include <QDebug>
 #include <QObject>
 
-class MyClass : public QObject {
+class GenCodeBridge : public QObject {
     Q_OBJECT
 public:
-    explicit MyClass(QObject* parent = 0);
-    ~MyClass();
+    explicit GenCodeBridge(QObject* parent = 0);
+    ~GenCodeBridge();
 signals:
     void timerChanged(int count);
 
@@ -23,4 +23,4 @@ public:
     GenCodeProxy mProxy;
 };
 
-#endif  // MYCLASS_H
+#endif  // GenCodeBridge_H

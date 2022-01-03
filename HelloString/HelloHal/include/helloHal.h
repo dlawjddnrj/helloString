@@ -10,7 +10,6 @@ public:
     void setTimeListener(IHelloListener *listener) override;
     void printMsg(std::string str) override;
     void timerRun();
-    // void onEvent(std::string& msg) override;
 
 private:
     IHelloListener* mListener = nullptr;

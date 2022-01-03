@@ -18,7 +18,7 @@ PKGCONFIG += /opt/test/lib/pkgconfig/gdbusCodegenGlibmm.pc
 
 SOURCES += \
         main.cpp \
-        myclass.cpp
+        genCodeBridge.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,7 +34,7 @@ else: unix:!android: target.path = /opt/test/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    myclass.h
+    genCodeBridge.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../opt/test/lib/release/ -lclientCommon
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../opt/test/lib/debug/ -lclientCommon

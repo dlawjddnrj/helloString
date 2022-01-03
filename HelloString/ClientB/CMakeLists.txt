@@ -20,7 +20,7 @@ pkg_check_modules(CLIENTCOMMON REQUIRED clientCommon)
 #### pkg-config 사용하여 라이브러리 검색 ####
 
 #### Client B ####
-ADD_EXECUTABLE(${SERVICE_NAME}_Client_B src/mainClient2.cpp)
+ADD_EXECUTABLE(${SERVICE_NAME}_Client_B src/clientB.cpp)
 
 target_include_directories(
 	${SERVICE_NAME}_Client_B PUBLIC
@@ -31,7 +31,7 @@ target_include_directories(
 
 target_sources (
 	${SERVICE_NAME}_Client_B PRIVATE
-	src/mainClient2.cpp
+	src/clientB.cpp
 )
 
 find_library(CHECK_LIBRARY
