@@ -1,0 +1,18 @@
+@startuml
+
+participant HBluetoothPhonebookImpl
+
+[-> HBluetoothPhonebookImpl : GlobalPbSearchDataReady(ContactsCursor* cursor)
+
+HBluetoothPhonebookImpl -> HBluetoothPhonebookImpl : shared memory data set...
+HBluetoothPhonebookImpl -> HBluetoothPhonebookImpl : copy_globalPbSearchData_from_cursor(cursor) \nSearch Data Copy ...
+
+group loop Search Data List
+HBluetoothPhonebookImpl -> HBluetoothPhonebookImpl : 메모리 lock 하여 데드락 방지?
+alt sp_listener = null
+HBluetoothPhonebookImpl -> HBluetoothPhonebookImpl : Search Data List 삭제(erase)
+end
+HBluetoothPhonebookImpl -> PbapGlbListener : onSearchResultUpdated_Global_PB(global_pb_search_keyword, mFromOffsetGlobalPBSearch, mToOffsetGlobalPBSearch, numbOfResult) \n 검색 결과 업데이트 상태 전달하여 로그 출력
+end group
+
+@enduml
